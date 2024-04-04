@@ -61,10 +61,9 @@ func (i *Identifier) statementNode() {}
 // Returns the token literal of an Identifier
 func (i *Identifier) TokenLiteral() string { return i.Token.Literal }
 
-// TokenLitral stores statements and Expressions
-// in a program's Statements and Expressions
-// properties.
-// Moves through the Statements form the AST
+/* TokenLitral stores statements and Expressions
+in a program's Statements and Expressions
+properties. */
 func (p *Program) TokenLiteral() string {
 	if len(p.Statements) > 0 {
 		return p.Statements[0].TokenLiteral()

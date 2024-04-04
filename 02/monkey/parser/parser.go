@@ -55,3 +55,45 @@ func (p *Parser) ParseProgram() *ast.Program {
 	return program
 }
 
+
+// parseStatement Checks the current token of a parser to 
+// classify the type of statement. Then, calls the
+// appropriate parsing method for the type of statement.
+// It returns a node with the type of the statement.
+func (p *Parser) parseStatement() ast.Statement {
+	switch p.curToken.Type {
+	case token.LET:
+		return p.parseLetStatement()
+	default:
+		return nill
+	}
+}
+
+
+// parseLetStatement Reads a let statement of the form
+// Let identifier = expression; and returns an ast
+// node for the statement.
+func (p *Parser) parseLetStatement() ast.LetStatement {
+
+	stmt := &ast.LetStatement{Token: p.curToken}
+
+	if !p.expectPeek(token.IDENT) {
+		return nil
+	}
+
+	stmt.Name = &ast.Identifier{Token: p.curToken, Value: p.curToken.Literal}
+
+	if !p.expectPeek(token.ASSIGN) {
+		return nil
+	}
+
+	// TODO: add the parsing of the expression. 
+
+	for !p.curTokenIs(token.SEMICOLON) {
+		p.nextToken()
+	}
+
+	return stmt
+}
+
+
