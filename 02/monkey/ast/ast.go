@@ -34,15 +34,14 @@ type LetStatement struct {
 	Token token.Token // the token.LET token
 }
 
-
 // Go method resolution is based on the receiver type.
 // You can define the same method on different types.
 
 // Returns a node of AST??
 func (ls *LetStatement) statementNode() {}
+
 // Returns the token literal of a LetStatement
 func (ls *LetStatement) TokenLiteral() string { return ls.Token.Literal }
-
 
 // The identifier node contains an IDENT token
 type Identifier struct {
@@ -58,8 +57,19 @@ type Program struct {
 
 // Return ??
 func (i *Identifier) statementNode() {}
+
 // Returns the token literal of an Identifier
 func (i *Identifier) TokenLiteral() string { return i.Token.Literal }
+
+// A return statement has a return token and
+// an expression.
+type ReturnStatement struct {
+	Token       token.Token // the token.RETURN token
+	ReturnValue Expression
+}
+
+func (rs *ReturnStatement) statementNode()       {}
+func (rs *ReturnStatement) TokenLiteral() string { return rs.Token.Literal }
 
 /* TokenLitral stores statements and Expressions
 in a program's Statements and Expressions
@@ -71,5 +81,3 @@ func (p *Program) TokenLiteral() string {
 		return ""
 	}
 }
-
-

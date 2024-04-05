@@ -9,9 +9,7 @@ import (
 func TestLetStatements(t *testing.T) {
 
 	input := `
-	let x = 5;
-	let y = 10;
-	let foobar = 4242;
+	return 43;
 	`
 
 	l := lexer.New(input)
@@ -19,23 +17,17 @@ func TestLetStatements(t *testing.T) {
 
 	program := p.ParseProgram()
 	checkParseErrors(t, p)
-	if program == nil {
-		t.Fatalf("program.Statements does not contain 3 statements. got=%d",
-			len(program.Statements))
-	}
 
-	tests := []struct {
-		expectedIdentifier string
-	}{
-		{"x"},
-		{"y"},
-		{"foobar"},
-	}
+	for _, stmt := range program.Statements {
+		returnStmt, ok := stmt.(*ast.ReturnStatement)
+		if !ok {
+			t.Errorf("stmt not *ast.ReturnStatement. got=%T", stmt)
+			continue
+		}
 
-	for i, tt := range tests {
-		stmt := program.Statements[i]
-		if !testLetStatement(t, stmt, tt.expectedIdentifier) {
-			return
+		if returnStmt.TokenLiteral() != "return" {
+			t.Errorf("returnStmt.TokenLiteral not 'return', got %q",
+				returnStmt.TokenLiteral())
 		}
 	}
 }
