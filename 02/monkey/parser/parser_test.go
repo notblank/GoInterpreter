@@ -18,6 +18,7 @@ func TestLetStatements(t *testing.T) {
 	p := New(l)
 
 	program := p.ParseProgram()
+	checkParseErrors(t, p)
 	if program == nil {
 		t.Fatalf("program.Statements does not contain 3 statements. got=%d",
 			len(program.Statements))
@@ -37,6 +38,23 @@ func TestLetStatements(t *testing.T) {
 			return
 		}
 	}
+}
+
+// checkParseErrors prints the list of errors found during the
+// parsing.
+
+func checkParseErrors(t *testing.T, p *Parser) {
+	errors := p.Errors()
+	if len(errors) == 0 {
+		return
+	}
+
+	t.Errorf("parser has %d errors", len(errors))
+	for _, msg := range errors {
+		t.Errorf("parser error: %q", msg)
+	}
+
+	t.FailNow()
 }
 
 // Checks if the statment has let as the token literal.
